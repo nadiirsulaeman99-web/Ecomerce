@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+{% include 'parts/alerts.html' %}
+
+
+    <div class="container mt-4 mb-4">
+        <div class="row g-3">
+            {% if page_obj %}
+            {% for products in page_obj %}
+                <div class="col-sm-12 col-md-6 col-lg-3">
+                    <div class="card product-card rounded-4 shadow-sm overflow-hidden h-100 d-flex flex-column justify-content-between">
+                        
+                        <img class="card-img-top product-image" src="{{products.image.url}}" alt="{{products.name}}">
+                        
+                        <div class="card-body bg-white d-flex flex-column justify-content-between">
+                            
+                            <h6 class="card-title text-primary fw-bold mb-2">{{products.name}}  </h6>
+                            <h6 class="card-text text-muted">Price: ${{products.price|floatformat:2}}</h6>
+                            
+                            <form action="{% url 'cart:cart_add' products.id %}" method="post" class="mt-auto">
+                                {% csrf_token %}
+                                
+                                <div class="mb-2 d-none">
+                                    {{ products.cart_product_form.quantity }}
+                                </div>
+                                {{ products.cart_product_form.override }}
+
+                                <div class="d-flex align-items-center gap-1">
+                                    <a href="{% url 'Store:product_detail' products.slug %}" class="btn btn-primary rounded-5 btn-sm w-75 py-2 rounded-3 text-nowrap">
+                                        View
+                                    </a>
+                                    
+                                    <button type="submit" class="btn btn-link text-primary btn-sm py-2 d-flex align-items-center justify-content-center border-0 bg-transparent text-decoration-none" title="Add to Cart">
+                                        <i class="fa-brands fa-opencart fs-5"></i>
+                                    </button>
+                                </div>
+                                </form>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <br><br><br>
+        <!-- 
+        {{page_obj}}<br> 
+        has Previous: {{ page_obj.has_previous }}<br>
+        has Next: {{ page_obj.has_next}}<br>
+        current page: {{ page_obj.number}}<br>
+        number of pages: {{ page_obj.paginator.num_pages}}<br><br><br><br>
+        -->
+        
+        <!-- pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1"><i class="fa-solid fa-chevron-left"></i> First</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+
+            <!-- <li class="page-item"> <a class="page-link disabled" href="#">page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li> -->
+            {% for i in nums %}
+                <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }} ">{{ forloop.counter }}</a></li>
+
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last <i class="fa-solid fa-chevron-right"></i></a></li>
+                
+            {% endif %}
+            
+            </ul>
+        </nav>
+
+        {% include 'parts/random_products.html' %}
+
+
+    </div>
+
+
+{% endblock content %}
+    

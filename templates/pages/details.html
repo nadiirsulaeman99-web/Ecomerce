@@ -1,0 +1,90 @@
+{% extends "base2.html" %}
+
+{% block content %}
+{% include 'parts/alerts.html' %}
+
+<div class="container py-2">
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-md-6 mb-0">
+            <div class="card">
+                <img src="{{detail.image.url}}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="Product Image">
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-3">
+                            <img src="{{detail.image.url}}" class="img-thumbnail" alt="Thumbnail">
+                        </div>
+                        <div class="col-3">
+                            <img src="{{detail.image.url}}" class="img-thumbnail" alt="Thumbnail">
+                        </div>
+                        <div class="col-3">
+                            <img src="{{detail.image.url}}" class="img-thumbnail" alt="Thumbnail">
+                        </div>
+                        <div class="col-3">
+                            <img src="{{detail.image.url}}" class="img-thumbnail" alt="Thumbnail">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h1 class="h2 mb-3">{{detail.name}}</h1>
+            <div class="mb-3">
+                <span class="h4 me-2">${{detail.price}}</span>
+                <span class="text-muted text-decoration-line-through">$99.99</span>
+                <span class="badge bg-danger ms-2">7% OFF</span>
+            </div>
+
+            <div class="mb-3">
+                <div class="d-flex align-items-center">
+                    <div class="text-warning me-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <span class="text-muted">(128 reviews)</span>
+                </div>
+            </div>
+
+            <p class="mb-4">{{detail.description}}</p>
+
+
+            <!-- Quantity -->
+             {{detail.quantity}}
+            <!-- <div class="mb-4">
+                <label for="quantity" class="form-label">Quantity:</label>
+                <input type="number" class="form-control" id="quantity" value="1" min="1" style="width: 80px;">
+            </div> -->
+
+            <!-- Form product add to cart -->
+            <form action="{% url 'cart:cart_add' detail.id %}" method="post">
+                {% csrf_token %}
+                {{cart_add_form}}
+                <input type="submit" value="Add to Cart" class="btn btn-primary rounded-4 mt-3 w-100  ">
+            </form>
+
+
+            <!-- Additional Info -->
+            <div class="mt-4">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-truck text-success me-2"></i>
+                    <span>Free shipping on orders over $50</span>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-undo text-warning me-2"></i>
+                    <span>30-day return policy</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-shield-alt text-success me-2"></i>
+                    <span>Secure payment</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

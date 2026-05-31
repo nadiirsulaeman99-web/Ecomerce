@@ -1,0 +1,73 @@
+{% extends "base2.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% with total_items=cart|length %}
+{% if total_items > 0 %}
+<div class="container my-5"> <!-- 'container' wuxuu ilaaliyaa ballaca (100% max-width) -->
+    <div class="row g-4"> <!-- 'g-4' ayaa maamusha firaaqada u dhaxaysa labada dhinac -->
+
+        <!-- Dhinaca Bidix: Form-ka (8 ka mid ah 12) -->
+        <div class="col-lg-8 col-md-7 col-sm-12">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5"> <!-- 'p-md-5' waxay siinaysaa boos ballaaran laptop-ka -->
+                
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold">Order Form</h2>
+                        <p class="text-muted">Fadlan buuxi macluumaadka hoose</p>
+                        <hr class="opacity-10">
+                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{form | crispy}}
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">Submit Order</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Dhinaca Midig: Summary (4 ka mid ah 12) -->
+        <div class="col-lg-4 col-md-5 col-sm-12">
+            <div class="card border-0 shadow-sm rounded-4 bg-light h-100">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Order Summary</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>x{{ item.quantity }}</td>
+                                <td>${{ item.total_price|floatformat:"2" }}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr class="fw-bold">
+                                <td colspan="2">Total</td>
+                                <td>${{ cart.get_total_price|floatformat:"2" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% else %}
+    <div class="text-center my-5">
+        <h2 class="fw-bold">Your cart is empty</h2>
+        <p class="text-muted">Please add some items to your cart before proceeding to checkout.</p>
+        <a href="{% url 'Store:home' %}" class="btn btn-outline-primary rounded-pill shadow-sm mt-3">Continue Shopping</a>
+    </div>
+{% endif %}
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,49 @@
+<div class="container"> 
+  <h2 class="text-center mb-4">Our Best Sellers </h2>
+  <hr>
+  <section class="slider-section">
+      <div class="container position-relative px-4 px-md-5"> 
+        <div id="categorySlider" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+
+            {% if random_products %}
+              {% for product in random_products %}
+                
+                {% if forloop.counter0|divisibleby:3 %}
+                <div class="carousel-item product-slider-item {% if forloop.first %}active{% endif %}">
+                  <div class="row g-4">
+                {% endif %}
+
+                    <div class="col-md-4">
+                      <div class="category-card" data-bs-toggle="collapse" data-bs-target="#prod-{{ product.id }}">
+                        {% if product.image %}
+                          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                          <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba" alt="{{ product.name }}">
+                        {% endif %}
+                        <div class="category-title" style="font-size: 18px; width: 85%; text-align: center; line-height: 1.2;">
+                          {{ product.name }}
+                        </div>
+                      </div>
+                    </div>
+
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+                  </div>
+                </div>
+                {% endif %}
+
+              {% endfor %}
+            {% endif %}
+
+          </div>
+
+          <button class="carousel-control-prev" type="button" data-bs-target="#categorySlider" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#categorySlider" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+  </section>
+</div>

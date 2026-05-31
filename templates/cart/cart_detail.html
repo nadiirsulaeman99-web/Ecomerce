@@ -1,0 +1,367 @@
+
+{% extends 'base2.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+{% include 'parts/alerts.html' %}
+
+<div class="container py-5">
+    <div class="row g-4"> 
+        <div class="col-lg-9">
+            <div class="bg-white p-4 rounded shadow-sm border">
+                <h1 class="h3 fw-bold mb-4 text-dark border-bottom pb-2">Shopping Cart</h1>
+                
+                {% if cart %}
+                    {% for item in cart %}
+                    {% with product=item.product %}
+                    <div class="row py-3 align-items-start border-bottom">
+                        
+                        <div class="col-md-2 col-4 mb-3 mb-md-0 text-center">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="img-fluid rounded" style="max-height: 140px; object-fit: contain;" alt="{{ product.name }}">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff" class="img-fluid rounded" style="max-height: 140px; object-fit: contain;" alt="No Image Available">
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-8 col-8">
+                            <h5 class="fw-bold text-dark mb-1 d-block text-decoration-none" style="font-size: 1.05rem; line-height: 1.4;">
+                                {{ product.name }}
+                            </h5>
+                            <p class="text-success small mb-1 fw-semibold">In Stock</p>
+                            
+                            <div class="d-flex flex-wrap align-items-center gap-2 mt-3 small">
+                                <form method="post" action="{% url 'cart:cart_add' product.id %}" class="d-flex align-items-center gap-2">
+                                    {% csrf_token %}
+                                    <div class="cart-form-inputs">
+                                        {{ item.update_quantity_form.quantity }}
+                                        {{ item.update_quantity_form.override }}
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary px-2 py-1" type="submit" title="Update">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </form>
+
+                                <div class="vr text-muted d-none d-md-block" style="height: 20px;"></div>
+                                
+                                <form method="post" action="{% url 'cart:cart_remove' product.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-link text-danger text-decoration-none p-0 border-0 small hover-underline">
+                                        <i class="fas fa-trash-alt me-1"></i>Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2 col-12 text-md-end text-start mt-2 mt-md-0">
+                            <div class="fw-bold text-dark h5 mb-0">${{ item.total_price|floatformat:2 }}</div>
+                        </div>
+
+                    </div>
+                    {% endwith %}
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-cart-x text-muted display-1"></i>
+                        <p class="fs-5 text-muted mt-3">Your cart is currently empty.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="text-start mt-4">
+                <a href="{% url 'Store:home' %}" class="btn btn-outline-primary px-4 py-2 rounded-3">
+                    <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="bg-white p-4 rounded shadow-sm border position-sticky" style="top: 20px;">
+                <h5 class="fw-bold text-dark mb-4">Order Summary</h5>
+                
+                {% if cart.coupon %}
+                    <div class="d-flex justify-content-between mb-2 small">
+                        <span class="text-muted">Subtotal</span>
+                        <span class="fw-semibold text-dark">${{ cart.get_total_price|floatformat:2 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 small">
+                        <span class="text-muted">Coupon ({{ cart.coupon.code }}):</span>
+                        <span class="text-success fw-semibold">-%{{ cart.coupon.discount|floatformat:2 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 small">
+                        <span class="text-muted">Discount</span>
+                        <span class="text-success fw-semibold">-${{ cart.get_discount|floatformat:2 }}</span>
+                    </div>
+                    <hr>
+                    <div class="mb-4">
+                        <h4 class="fw-normal text-dark fs-5 d-flex justify-content-between align-items-center">
+                            <span>Total:</span>
+                            <span class="fw-bold text-dark">${{ cart.total_price_after_discount|floatformat:2 }}</span>
+                        </h4>
+                    </div>
+                {% else %}
+                    <div class="mb-4">
+                        <h4 class="fw-normal text-dark fs-5 d-flex justify-content-between align-items-center">
+                            <span>Subtotal:</span>
+                            <span class="fw-bold text-dark">${{ cart.get_total_price|floatformat:2 }}</span>
+                        </h4>
+                    </div>
+                {% endif %}
+                
+                <a class="btn btn-primary w-100 py-2.5 rounded-3 fw-bold text-white border-0 mb-4" href="{% url 'orders:order_create' %}">
+                    Proceed to Checkout
+                </a> 
+                
+                <div class="border-top pt-3">
+                    <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Apply Promo Code</h6>
+                    <form action="{% url 'coupons:coupon_apply' %}" method="post">
+                        {% csrf_token %}
+                        <div class="row g-2 align-items-center">
+                            <div class="col custom-crispy-no-margin mb-1">
+                                {{ coupon_form.code|as_crispy_field }}
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-outline-dark fw-semibold mt-4" type="submit" style="height: 38px; padding: 0 15px; font-size: 0.85rem;">
+                                    Apply
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="mt-4 pt-3 border-top text-muted small" style="font-size: 0.8rem;">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-shield-alt text-success me-2 fs-6"></i>
+                        <span>Secure transactions and payments.</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-truck text-primary me-2 fs-6"></i>
+                        <span>Free shipping on orders over $50</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-undo text-primary me-2 fs-6"></i>
+                        <span>30-day return policy</span>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+
+<style>
+    .hover-underline:hover {
+        text-decoration: underline !important;
+    }
+    /* Cleans up the extra margin Crispy Forms generates inside inline fields */
+    .custom-crispy-no-margin .mb-3 {
+        margin-bottom: 0 !important;
+    }
+    .cart-form-inputs input, .cart-form-inputs select {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        border-radius: 0.375rem;
+        border: 1px solid #dee2e6;
+        max-width: 70px;
+    }
+</style>
+{% endblock content %}
+
+
+
+{% comment %} {% extends 'base2.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-5">Shopping Cart</h1>
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Cart Items -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row cart-item mb-3">
+                        
+                        {% for item in cart %}
+                        {% with product=item.product  %}
+                        <hr class="mt-3 mb-3">
+                            <div class="col-md-3">
+                                <img src="{{product.image.url}}" alt="{{product.name}}" class="img-fluid rounded">
+                            </div>
+                            <div class="col-md-5">
+                                <h5 class="card-title">{{product.name}}</h5>
+                            </div>
+                            <div class="col-md-2">
+                                <form method="post" action="{% url 'cart:cart_add' product.id %}" method="post" >
+                                    {% csrf_token %}
+                                    {{item.update_quantity_form.quantity}}
+                                    {{item.update_quantity_form.override}}
+                                    <button class="btn  btn-outline-primary" type="submit"><i class="fa-regular fa-pen-to-square"></i></button>
+                                </form>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <p class="fw-bold">${{item.total_price}}</p>
+                                <form method="post" action="{% url 'cart:cart_remove' product.id %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- Continue Shopping Button -->
+            <div class="text-start mb-4">
+                <a href="{% url 'Store:home' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <!-- Cart Summary -->
+            <div class="card cart-summary">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Order Summary</h5>
+                    {% if cart.coupon %}
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Subtotal</span>
+                        <span>${{cart.get_total_price}}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Coupon: {{ cart.coupon.code }} %{{ cart.coupon.discount }}</span>
+                        <span>-${{ cart.get_discount|floatformat:2 }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Total</strong>
+                        <strong>${{cart.total_price_after_discount|floatformat:2}}</strong>
+                    </div>
+                    <a class="btn btn-primary w-100" href="{% url 'orders:order_create' %}">Proceed to Checkout</a>
+                    {% else %}
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Subtotal</span>
+                        <span>${{cart.get_total_price}}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Total</strong>
+                        <strong>${{cart.get_total_price|floatformat:2}}</strong>
+                    </div>
+                    <a class="btn btn-primary w-100" href="{% url 'orders:order_create' %}">Proceed to Checkout</a>                      
+                    {% endif %}
+                </div>
+            </div> 
+            <!-- Promo Code -->
+           <div class="card border-0 shadow-sm rounded-4 mt-4">
+    <div class="card-body p-4">
+        <h6 class="fw-bold text-dark mb-3">Apply Promo Code</h6>
+        
+        <form action="{% url 'coupons:coupon_apply' %}" method="post">
+            {% csrf_token %}
+            
+            <div class="row g-2 align-items-end">
+                <div class="col">
+                    <div class="mb-0">
+                        {{ coupon_form.code|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary px-4 mb-3" type="submit" style="height: 38px;">
+                        Apply
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+{% endblock content %} 
+
+
+{% block content %}
+{% include 'parts/alerts.html' %}
+
+<div class="container py-5">
+    <form action="{% url 'cart:cart_add' detail.id %}" method="post">
+        {% csrf_token %}
+        
+        <div class="row g-4"> <div class="col-lg-9">
+                <div class="bg-white p-4 rounded shadow-sm border">
+                    <h1 class="h3 fw-bold mb-4 text-dark border-bottom pb-2">Shopping Cart</h1>
+                    
+                    <div class="row py-3 align-items-start border-bottom">
+                        
+                        <div class="col-md-2 col-4 mb-3 mb-md-0 text-center">
+                            {% if detail.image %}
+                                <img src="{{ detail.image.url }}" class="img-fluid rounded" style="max-height: 140px; object-fit: contain;" alt="Product Image">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff" class="img-fluid rounded" style="max-height: 140px; object-fit: contain;">
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-8 col-8">
+                            <h5 class="fw-bold text-dark mb-1 d-block text-decoration-none" style="font-size: 1.05rem; line-height: 1.4;">
+                                {{ detail.name }}
+                            </h5>
+                            <p class="text-success small mb-1 fw-semibold">In Stock</p>
+                            
+                            <div class="d-flex flex-wrap align-items-center gap-3 mt-3 small">
+                                {{ cart_add_form }}
+
+                                <div class="vr text-muted d-none d-md-block"></div>
+                                <a href="{% url 'cart:cart_remove' detail.id  %}" class="text-danger text-decoration-none hover-underline"><i class="fas fa-trash-alt me-1"></i>Delete</a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2 col-12 text-md-end text-start mt-2 mt-md-0">
+                            <span class="badge bg-danger mb-1">10% off</span>
+                            <div class="fw-bold text-dark h5 mb-0">${{ detail.price }}</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div> <div class="col-lg-3">
+                <div class="bg-white p-4 rounded shadow-sm border position-sticky" style="top: 20px;">
+                    <div class="mb-3">
+                        <h4 class="fw-normal text-dark fs-5">
+                            Subtotal (1 item): <span class="fw-bold">${{ detail.price }}</span>
+                        </h4>
+                    </div>
+                    
+                    <input type="submit" value="Add to Cart" class="btn btn-primary w-100 py-2.5 rounded-3 fw-bold text-white border-0 ">
+                    
+                    <div class="mt-4 pt-3 border-top text-muted small">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-shield-alt text-success me-2 fs-5"></i>
+                            <span>Secure transactions and payments.</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-truck text-primary me-2 fs-5"></i>
+                            <span>Free shipping on orders over $50</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-undo text-primary me-2 fs-5"></i>
+                            <span>30-day return policy</span>
+                        </div>
+                    </div>
+                </div>
+            </div> </div> </form>
+</div>
+
+<style>
+    .btn-amazon:hover {
+        background-color: #f7ca00;
+        border-color: #f2c200;
+    }
+    .hover-underline:hover {
+        text-decoration: underline !important;
+    }
+</style>
+{% endblock content %}
+
+{% endcomment %}

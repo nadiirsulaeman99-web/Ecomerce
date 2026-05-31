@@ -1,0 +1,74 @@
+    <!-- Start Banner Hero -->
+    {% load static %}
+
+    <div id="template-mo-zay-hero-carousel" class="carousel slide custom-carousel shadow-sm" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="container h-100">
+                <div class="row p-4 p-md-5 align-items-center h-100">
+                    <div class="col-md-6 order-md-last text-center">
+                        <img class="img-fluid slider-img" src="{% static 'images/banner_img_01.jpg' %}" alt="Django Ecom 1">
+                    </div>
+                    <div class="col-md-6 text-start">
+                        <h1 class="fw-bold text-primary display-6">Django <span class="text-dark">Ecommerce</span></h1>
+                        <h3 class="h4 text-secondary mb-3">Tiny and Perfect eCommerce Template</h3>
+                        <p class="text-muted small">
+                            Kani waa madal casri ah oo lagu dhisay Django iyo Bootstrap 5. Waxaad si fudud ku maamuli kartaa alaabtaada, adeega macaamiisha, iyo lacag bixinta elektaroonigga ah.
+                        </p>
+                        <a href="{% url 'Store:home' %}" class="btn btn-primary rounded-pill px-4 shadow-sm mt-2">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="container h-100">
+                <div class="row p-4 p-md-5 align-items-center h-100">
+                    <div class="col-md-6 order-md-last text-center">
+                        <img class="img-fluid slider-img" src="{% static 'images/banner_img_02.jpg' %}" alt="Django Ecom 1">
+                    </div>
+                    <div class="col-md-6 text-start">
+                        <h1 class="fw-bold text-dark display-6">Ugu Kaalay <span class="text-primary">Qiimo Jaban</span></h1>
+                        <h3 class="h4 text-secondary mb-3">Aliquip ex ea commodo consequat</h3>
+                        <p class="text-muted small">
+                            Waxaan kuu haynaa dharka iyo agabka ugu dambeeyay ee casriga ah. Ka dukaamayso gurigaaga adoo helaya dammaanad buuxda iyo adeeg gaarsiis ah oo degdeg ah.
+                        </p>
+                        <a href="{% url 'Store:home' %}" class="btn btn-primary rounded-pill px-4 shadow-sm mt-2">Explore More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="container h-100">
+                <div class="row p-4 p-md-5 align-items-center h-100">
+                    <div class="col-md-6 order-md-last text-center">
+                        <img class="img-fluid slider-img" src="{% static 'images/banner_img_03.jpg' %}" alt="Django Ecom 1">
+                    </div>
+                    <div class="col-md-6 text-start">
+                        <h1 class="fw-bold text-dark display-6">Badbaado <span class="text-success">100% ah</span></h1>
+                        <h3 class="h4 text-secondary mb-3">Ullamco laboris nisi ut</h3>
+                        <p class="text-muted small">
+                            Adeegayaga lacag bixintu waa ammaan, waxaan kuu diyaarinay nidaam fudud oo aad ku dalban karto alaabta adoo isticmaalaya foomamka casriga ah.
+                        </p>
+                        <a href="{% url 'Store:home' %}" class="btn btn-success rounded-pill px-4 shadow-sm mt-2">Order Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev text-decoration-none w-auto ps-3" type="button" data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide="prev">
+        <i class="fas fa-chevron-left control-icon"></i>
+    </button>
+    <button class="carousel-control-next text-decoration-none w-auto pe-3" type="button" data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide="next">
+        <i class="fas fa-chevron-right control-icon"></i>
+    </button>
+</div>
+    <!-- End Banner Hero -->

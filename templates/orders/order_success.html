@@ -1,0 +1,57 @@
+{% extends "base2.html" %}
+
+{% block content %}
+<style>
+    /* 1. Xakameynta Icon-ka iyo Padding-ka Mobile-ka */
+    @media (max-width: 576px) {
+        .display-icon { font-size: 3.5rem !important; }
+        .success-card { padding: 1.5rem !important; }
+        .success-title { font-size: 1.4rem !important; }
+    }
+
+    /* 2. SIXIDDA IPAD & TABLETS (Specific Fix) */
+    /* Waxaan xaddidayaa inta uu u fidi karo Card-ka si uusan dhinacyada u taaban */
+    .responsive-container {
+        width: 100%;
+        max-width: 600px; /* Ballaca ugu habboon iPad iyo Surface Pro */
+        margin: 0 auto;
+    }
+</style>
+
+<div class="container my-2">
+    <div class="row justify-content-center">
+
+        <div class="col-11 col-sm-10 text-center">
+            <div class="responsive-container">
+                
+                <!-- Icon Success -->
+                <div class="mb-2">
+                    <i class="bi bi-check-circle-fill text-success display-icon" style="font-size: 5rem;"></i>
+                </div>
+
+                <!-- Fariinta Guusha -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-2 success-card">
+                    <h2 class="fw-bold text-success mb-2 success-title">Dalabkaaga si guul leh ayaa loo helay!</h2>
+                    <p class="lead text-muted mb-4" style="font-size: clamp(1rem, 2vw, 1.15rem);">
+                        Waad ku mahadsan tahay dalabkaaga. Waxaan hadda kuu soo dirnay email xaqiijin ah.
+                    </p>
+
+                    <div class="bg-light p-3 p-md-4 rounded-3 mb-4">
+                        <h6 class="fw-bold mb-2">Macluumaadka Dalabka:</h6>
+                        <p class="mb-1">Order ID: <span class="badge bg-primary fs-6">{{ order.order_id }}</span></p>
+                        <p class="text-muted small mb-0">Status: In Processing</p>
+                    </div>
+
+                    <!-- Badhanka -->
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'Store:home' %}" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm py-2 fw-bold">
+                            Continue Shopping
+                        </a>
+                    </div>
+                </div>
+
+            </div> <!-- /responsive-container -->
+        </div>
+    </div>
+</div>
+{% endblock %}

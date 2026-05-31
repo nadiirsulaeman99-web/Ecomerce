@@ -1,0 +1,82 @@
+<footer class="bg-dark text-white pt-5 pb-3" style="background-color: #0c1524 !important;">
+    <div class="container px-4 px-lg-5">
+        <div class="row g-4 py-4">
+            
+            <div class="col-lg-3 col-md-6">
+              <div class="d-flex align-items-center mb-3">
+                <span class="fs-4 fw-bold text-primary text-uppercase">Djaongo</span>
+                <span class="fs-4 fw-bold text-primary text-uppercase ms-1">Ecom</span>
+              </div>
+              <p class="text-white-50 small lh-lg">
+                Your trusted Django Ecom in Mogadishu. Quality products, affordable prices, and exceptional service since 2020.
+              </p>
+              <div class="d-flex gap-2 mt-4">
+                <a href="#" class="btn btn-outline-primary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="btn btn-outline-warning btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="btn btn-outline-success btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;"><i class="fa-brands fa-whatsapp"></i></a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 ps-lg-5">
+              <h5 class="fw-bold mb-4">Information</h5>
+              <ul class="list-unstyled d-flex flex-column gap-2 small">
+                <li><a href="#" class="text-white-50 text-decoration-none hover-white">About Us</a></li>
+                <li><a href="#" class="text-white-50 text-decoration-none hover-white">Contact Us</a></li>
+                <li><a href="#" class="text-white-50 text-decoration-none hover-white">Return Policy</a></li>
+                <li><a href="#" class="text-white-50 text-decoration-none hover-white">Privacy Policy</a></li>
+                <li><a href="#" class="text-white-50 text-decoration-none hover-white">Terms & Conditions</a></li>
+              </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <h5 class="fw-bold mb-4">Categories</h5>
+              <ul class="list-unstyled d-flex flex-column gap-2 small">
+                {% if categories %}
+                  {% for category in categories|slice:":5" %} <li>
+                      <a href="#" class="text-white-50 text-decoration-none hover-white">
+                        {{ category.name }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                {% else %}
+                  <li><a href="#" class="text-white-50 text-decoration-none hover-white">Groceries</a></li>
+                  <li><a href="#" class="text-white-50 text-decoration-none hover-white">Electronics</a></li>
+                  <li><a href="#" class="text-white-50 text-decoration-none hover-white">Fresh Produce</a></li>
+                  <li><a href="#" class="text-white-50 text-decoration-none hover-white">Home Appliances</a></li>
+                  <li><a href="#" class="text-white-50 text-decoration-none hover-white">Dairy Products</a></li>
+                {% endif %}
+              </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <h5 class="fw-bold mb-4">Subscribe to Our Newsletter</h5>
+              <p class="text-white-50 small mb-3">Get the latest deals and offers directly to your inbox</p>
+              <form action="#" method="POST" class="input-group">
+                {% csrf_token %}
+                <input type="email" class="form-control border-0 py-2 ps-3 w-75" placeholder="Email" required style="border-radius: 8px 0 0 8px;">
+                <button class="btn btn-primary p-0 m-0 w-25" type="submit" style="border-radius: 0 8px 8px 0; background-color: #007bff; font-size: 0.775rem;">Subscribe</button>
+              </form>
+            </div>
+
+        </div>
+
+        <hr class="border-secondary my-4">
+
+        <div class="row">
+          <div class="col-100 text-center text-white-50 small">
+            <p class="mb-0">
+              &copy; Copyright 2020 &ndash; 2026 | Website by Django Ecom | All Rights Reserved | Powered by Safa Global IT
+            </p>
+          </div>
+        </div>
+
+    </div>
+</footer>
+
+<style>
+  .hover-white:hover {
+    color: #fff !important;
+    transition: 0.3s ease;
+  }
+</style>
