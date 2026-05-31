@@ -59,7 +59,7 @@ def register(request):
 
 def activate_account(request, uidb64, token):
     try:
-        # 🚀 SIDA UGU SAXAN: force_str ayaa loo isticmaalaa decode-ka dambe
+        #SIDA UGU SAXAN: force_str ayaa loo isticmaalaa decode-ka dambe
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = Acount._default_manager.get(pk=uid)
     except (TypeError, ValueError, OverflowError, Acount.DoesNotExist):
@@ -83,25 +83,6 @@ def activate_account(request, uidb64, token):
              
         messages.error(request, 'Whoops!!! There was a error | Please register again...')
         return redirect('acounts:register')
-
-
-
-# def activate_account(request, uidb64, token):
-#     try:
-#         uid= urlsafe_base64_decode(uidb64).decode()
-#         user= Acount._default_manager.get(pk=uid)
-#     except(TypeError, ValueError, OverflowError, Acount.DoesNotExist):
-#         user=None
-
-#     if user is not None and default_token_generator.check_token(user, token):
-#         user.is_active = True
-#         user.save()
-#         messages.success(request, ('Your Account is activated...'))
-#         return redirect('acounts:login')
-#     else:
-#         messages.error(request, ('Whoops!!! There was a error | Please register again...'))
-#         return redirect('acounts:register')
-
 
 
 def login_views(request):

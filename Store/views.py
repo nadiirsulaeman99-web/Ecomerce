@@ -75,11 +75,6 @@ def product_detail(request, product_slug):
     return render(request, 'pages/details.html', context)
 
 
-
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from django.shortcuts import render
-from .models import Product
-
 def search(request):
     query = None
     results = []
@@ -110,8 +105,5 @@ def search(request):
 
 
 
-
-
 def page404(request, exception):
-    # return HttpResponse("Halkan waa bogga 404 ee rasmiga ah!", status=404)
     return render(request, 'page404.html' ,  status=404)
